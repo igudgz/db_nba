@@ -1,4 +1,4 @@
--- quantidade de arremessos por jogador 
+-- 10 jogadores que obteram as maiores médias de arremessos por ano
 select games_details.PLAYER_NAME, games_details.TEAM_CITY, round(avg(games_details.FGM + games_details.FGA + games_details.FG_PCT + games_details.FG3M + games_details.FG3A 
 + games_details.FTM + games_details.FTA),2) as média_de_arremessos,games.SEASON,
  CASE
@@ -17,10 +17,10 @@ select games_details.PLAYER_NAME, games_details.TEAM_CITY, round(avg(games_detai
 from games_details
  inner join games on games_details.game_id = games.game_id
  where games.SEASON between '2010' and '2019' 
-group by games_details.PLAYER_NAME,games_details.TEAM_CITY,games.SEASON having média_de_arremessos > 50 order by média_de_arremessos desc  ;
+group by games_details.PLAYER_NAME,games_details.TEAM_CITY,games.SEASON having média_de_arremessos > 50 order by média_de_arremessos desc  limit 10 ;
 
--- jogadores que mais jogaram em minutos 
-select  games_details.PLAYER_NAME, games_details.TEAM_CITY, concat(sum(games_details.min ) , ' min') as minuntos_jogados,games.SEASON,
+-- 10 jogadores que mais jogaram em minutos por ano
+select  games_details.PLAYER_NAME, games_details.TEAM_CITY, sum(games_details.min ) as minuntos_jogados,games.SEASON,
  CASE
   WHEN games.SEASON = '2010' THEN '2010-2011'
   WHEN games.SEASON = '2011' THEN '2011-2012'
@@ -36,11 +36,11 @@ select  games_details.PLAYER_NAME, games_details.TEAM_CITY, concat(sum(games_det
   END as Temporada 
 from games_details
 inner join games on games_details.game_id = games.game_id
- where games.SEASON between '2010' and '2019' 
-group by games_details.PLAYER_NAME, games_details.TEAM_CITY,games.SEASON having minuntos_jogados > 3000  order by minuntos_jogados desc ;
+where games.SEASON between '2010' and '2019' 
+group by games_details.PLAYER_NAME, games_details.TEAM_CITY,games.SEASON  order by minuntos_jogados desc limit 10;
 
 
--- time da casa que mais venceu em casa
+-- 10 times que mais venceu em casa por ano
 select games.TEAM_ID_home as time_de_casa,games_details.TEAM_CITY, sum(games.home_team_wins) as partidas_ganhadas_em_casa,games.SEASON,
 CASE
   WHEN games.SEASON = '2010' THEN '2010-2011'
@@ -56,4 +56,6 @@ WHEN games.SEASON = '2012' THEN '2012-2013'
   END as Temporada 
 from games
 inner join games_details on games_details.game_id = games.game_id
-group by time_de_casa,games_details.TEAM_CITY,games.SEASON having partidas_ganhadas_em_casa > 250  order by partidas_ganhadas_em_casa desc ;
+where
+	games.season between '2010' and '2019' 
+group by time_de_casa,games_details.TEAM_CITY,games.SEASON having partidas_ganhadas_em_casa > 250  order by partidas_ganhadas_em_casa desc limit 10;
