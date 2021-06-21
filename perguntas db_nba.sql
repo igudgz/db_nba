@@ -134,3 +134,22 @@ select
 	 time 
  order by 
 	`Ano de fundação do clube`  limit 10 ;
+  
+-- times mais defensivos
+select TEAM_CITY, sum(dreb) as rebotes_denfesivos,
+sum(reb) as rebotes ,sum(blk) as bloqueios 
+from games_details group by TEAM_CITY
+ order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+
+-- jogadores mais defensivos
+select PLAYER_NAME, sum(dreb) as rebotes_denfesivos,
+sum(reb) as rebotes ,sum(blk) as bloqueios 
+from games_details group by PLAYER_NAME
+ order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+ 
+-- arremessos por time
+select  TEAM_CITY,sum(FGM) as arremessos from games_details
+group by TEAM_CITY order by arremessos;
+
+
+
