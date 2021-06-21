@@ -57,3 +57,19 @@ WHEN games.SEASON = '2012' THEN '2012-2013'
 from games
 inner join games_details on games_details.game_id = games.game_id
 group by time_de_casa,games_details.TEAM_CITY,games.SEASON having partidas_ganhadas_em_casa > 250  order by partidas_ganhadas_em_casa desc ;
+
+-- times mais defensivos
+select TEAM_CITY, sum(dreb) as rebotes_denfesivos,
+sum(reb) as rebotes ,sum(blk) as bloqueios 
+from games_details group by TEAM_CITY
+ order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+
+-- jogadores mais defensivos
+select PLAYER_NAME, sum(dreb) as rebotes_denfesivos,
+sum(reb) as rebotes ,sum(blk) as bloqueios 
+from games_details group by PLAYER_NAME
+ order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+ 
+-- arremessos por time
+select  TEAM_CITY,sum(FGM) as arremessos from games_details
+group by TEAM_CITY order by arremessos;
