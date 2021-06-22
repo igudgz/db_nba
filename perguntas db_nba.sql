@@ -60,7 +60,7 @@ where
 	games.season between '2010' and '2019' 
 group by time_de_casa,games_details.TEAM_CITY,games.SEASON having partidas_ganhadas_em_casa > 250  order by partidas_ganhadas_em_casa desc limit 10;
 
--- Cestinhas(jogadores que mais pontuaram) na década
+-- Top 10 Cestinhas(jogadores que mais pontuaram) na década
  SELECT 
 	games_details.player_name as nome_jogador ,
 	concat(games_details.TEAM_CITY,' ', teams.nickname) as time,
@@ -92,7 +92,7 @@ WHEN games.SEASON = '2012' THEN '2012-2013'
 	Pontos desc
 	limit 10;
 
-  -- 10 jogadores com + assistências da década
+  -- Top 10 jogadores com mais assistências da década
 SELECT 
    games_details.player_name as nome_jogador,
 	concat(games_details.TEAM_CITY,' ', teams.nickname) as time,
@@ -124,7 +124,7 @@ WHEN games.SEASON = '2012' THEN '2012-2013'
 	assistências desc
  limit 10  ; 
 
- -- 10 clubes mais antigos.
+ -- Top 10 clubes mais antigos.
 select 
 	MIN(min_year) as `Ano de fundação do clube`,
     concat(city, ' ', nickname) as time
@@ -135,19 +135,19 @@ select
  order by 
 	`Ano de fundação do clube`  limit 10 ;
   
--- times mais defensivos
+-- Top 10 times mais defensivos
 select TEAM_CITY, sum(dreb) as rebotes_denfesivos,
 sum(reb) as rebotes ,sum(blk) as bloqueios 
 from games_details group by TEAM_CITY
  order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
 
--- jogadores mais defensivos
+-- Top 10 jogadores mais defensivos
 select PLAYER_NAME, sum(dreb) as rebotes_denfesivos,
 sum(reb) as rebotes ,sum(blk) as bloqueios 
 from games_details group by PLAYER_NAME
  order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
  
--- arremessos por time
+-- Top 10 dos time que mais arremesaram da década
 select  TEAM_CITY,sum(FGM) as arremessos from games_details
 group by TEAM_CITY order by arremessos;
 
