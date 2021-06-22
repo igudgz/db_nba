@@ -19,7 +19,7 @@ from games_details
  where games.SEASON between '2010' and '2019' 
 group by games_details.PLAYER_NAME,games_details.TEAM_CITY,games.SEASON having média_de_arremessos > 50 order by média_de_arremessos desc  limit 10 ;
 
--- Top 10 dos times que mais venceram em casa da década 
+-- Top 10 jogadores que mais permaneceram na quadra na década
 select  games_details.PLAYER_NAME, games_details.TEAM_CITY, sum(games_details.min ) as minuntos_jogados,games.SEASON,
  CASE
   WHEN games.SEASON = '2010' THEN '2010-2011'
