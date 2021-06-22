@@ -1,4 +1,4 @@
--- 10 jogadores que obteram as maiores médias de arremessos por ano
+-- Top 10  de jogadores que possui as maiores médias de arremessos da década
 select games_details.PLAYER_NAME, games_details.TEAM_CITY, round(avg(games_details.FGM + games_details.FGA + games_details.FG_PCT + games_details.FG3M + games_details.FG3A 
 + games_details.FTM + games_details.FTA),2) as média_de_arremessos,games.SEASON,
  CASE
@@ -19,7 +19,7 @@ from games_details
  where games.SEASON between '2010' and '2019' 
 group by games_details.PLAYER_NAME,games_details.TEAM_CITY,games.SEASON having média_de_arremessos > 50 order by média_de_arremessos desc  limit 10 ;
 
--- 10 jogadores que mais jogaram em minutos por ano
+-- Top 10 dos times que mais venceram em casa da década 
 select  games_details.PLAYER_NAME, games_details.TEAM_CITY, sum(games_details.min ) as minuntos_jogados,games.SEASON,
  CASE
   WHEN games.SEASON = '2010' THEN '2010-2011'
@@ -40,7 +40,7 @@ where games.SEASON between '2010' and '2019'
 group by games_details.PLAYER_NAME, games_details.TEAM_CITY,games.SEASON  order by minuntos_jogados desc limit 10;
 
 
--- 10 times que mais venceu em casa por ano
+-- Top 10 dos times que mais venceram em casa da década 
 select games.TEAM_ID_home as time_de_casa,games_details.TEAM_CITY, sum(games.home_team_wins) as partidas_ganhadas_em_casa,games.SEASON,
 CASE
   WHEN games.SEASON = '2010' THEN '2010-2011'
