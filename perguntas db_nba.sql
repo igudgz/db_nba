@@ -9,7 +9,7 @@ select games_details.PLAYER_NAME, games_details.TEAM_CITY, round(avg(games_detai
   WHEN games.SEASON = '2014' THEN '2014-2015'
   WHEN games.SEASON = '2015' THEN '2015-2016'
   WHEN games.SEASON = '2016' THEN '2016-2017'
-  WHEN games.SEASON = '2017' THEN '2017-2018'
+  WHEN games.SEASON = '2017' THEN '2017-2018'  
   WHEN games.SEASON = '2018' THEN '2018-2019'
   WHEN games.SEASON = '2019' THEN '2019-2020'
   WHEN games.SEASON = '2020' THEN '2020-2021'
@@ -136,20 +136,23 @@ select
 	`Ano de fundação do clube`  limit 10 ;
   
 -- Top 10 times mais defensivos
-select TEAM_CITY, sum(dreb) as rebotes_denfesivos,
+select TEAM_ABBREVIATION, sum(dreb) as rebotes_denfesivos,
 sum(reb) as rebotes ,sum(blk) as bloqueios 
-from games_details group by TEAM_CITY
- order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+from games_details group by TEAM_ABBREVIATION
+ order by rebotes_denfesivos desc, rebotes desc , bloqueios desc
+ limit 10;
 
 -- Top 10 jogadores mais defensivos
 select PLAYER_NAME, sum(dreb) as rebotes_denfesivos,
 sum(reb) as rebotes ,sum(blk) as bloqueios 
 from games_details group by PLAYER_NAME
- order by rebotes_denfesivos desc, rebotes desc , bloqueios desc;
+order by rebotes_denfesivos desc, rebotes desc , bloqueios desc
+limit 10 ;
  
--- Top 10 dos time que mais arremesaram da década
-select  TEAM_CITY,sum(FGM) as arremessos from games_details
-group by TEAM_CITY order by arremessos;
+-- Top 10 dos time que mais converteram arremesos da década
+select TEAM_ABBREVIATION,sum(FGM) as arremessos from games_details
+group by TEAM_ABBREVIATION order by arremessos desc
+limit 10;
 
 -- 10 JOGADORES MAIS OFENSIVOS EM UMA TEMPORADA
 SELECT PLAYER_NAME Jogador, CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, SUM(PTS) Pontos, SUM(OREB) Reb_Ofensivos, SUM(AST) Assistências, SUM(gd.TO) Perda_de_Posse, ROUND((SUM(PTS) + SUM(OREB) + SUM(AST) - SUM(gd.TO)),2) Resultado,
