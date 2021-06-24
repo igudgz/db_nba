@@ -1,4 +1,16 @@
+
+-- PRIMARY AND FOREIGN KEYS
+ALTER TABLE games ADD PRIMARY KEY (GAME_ID);
+ALTER TABLE teams ADD PRIMARY KEY (TEAM_ID);
+ALTER TABLE games_details ADD FOREIGN KEY(GAME_ID) REFERENCES games(GAME_ID);
+ALTER TABLE games_details ADD FOREIGN KEY(TEAM_ID) REFERENCES teams(TEAM_ID);
+ALTER TABLE games ADD FOREIGN KEY(HOME_TEAM_ID) REFERENCES teams(TEAM_ID);
+ALTER TABLE games ADD FOREIGN KEY(VISITOR_TEAM_ID) REFERENCES teams(TEAM_ID);
+
+
+
 -- Top 10  de jogadores que possui as maiores médias de arremessos da década
+
 select games_details.PLAYER_NAME, games_details.TEAM_CITY, round(avg(games_details.FGM + games_details.FGA + games_details.FG_PCT + games_details.FG3M + games_details.FG3A 
 + games_details.FTM + games_details.FTA),2) as média_de_arremessos,games.SEASON,
  CASE
@@ -154,8 +166,8 @@ select TEAM_ABBREVIATION,sum(FGM) as arremessos from games_details
 group by TEAM_ABBREVIATION order by arremessos desc
 limit 10;
 
--- 10 JOGADORES MAIS OFENSIVOS EM UMA TEMPORADA
-SELECT PLAYER_NAME Jogador, CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, SUM(PTS) Pontos, SUM(OREB) Reb_Ofensivos, SUM(AST) Assistências, SUM(gd.TO) Perda_de_Posse, ROUND((SUM(PTS) + SUM(OREB) + SUM(AST) - SUM(gd.TO)),2) Resultado,
+-- TOP 10 JOGADORES MAIS OFENSIVOS EM MÉDIA POR UMA TEMPORADA
+SELECT PLAYER_NAME Jogador, CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, ROUND((SUM(PTS) + SUM(OREB) + SUM(AST) - SUM(gd.TO))/COUNT(gd.GAME_ID),2) Resultado,
 	CASE
 		WHEN g.SEASON = '2010' THEN '2010-2011'
 		WHEN g.SEASON = '2011' THEN '2011-2012'
@@ -174,11 +186,12 @@ INNER JOIN teams t ON t.TEAM_ID = gd.TEAM_ID
 INNER JOIN games g ON g.GAME_ID = gd.GAME_ID
 WHERE SEASON BETWEEN 2010 AND 2019
 GROUP BY Jogador, Time, Temporada
+HAVING COUNT(gd.GAME_ID) > 65
 ORDER BY Resultado DESC
 LIMIT 10;
 
--- 10 TIMES MAIS OFENSIVOS EM UMA TEMPORADA
-SELECT CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, SUM(gd.PTS) Pontos, SUM(gd.OREB) Reb_Ofensivos, SUM(gd.AST) Assistências, SUM(gd.TO) Perda_de_Posse, SUM(gd.PTS) + SUM(gd.OREB) + SUM(gd.AST) - SUM(gd.TO) Resultado,
+-- TOP 10 TIMES MAIS OFENSIVOS EM UMA TEMPORADA
+SELECT CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, SUM(gd.PTS) + SUM(gd.OREB) + SUM(gd.AST) - SUM(gd.TO) Ofensividade,
 	CASE
 		WHEN g.SEASON = '2010' THEN '2010-2011'
 		WHEN g.SEASON = '2011' THEN '2011-2012'
@@ -197,11 +210,11 @@ INNER JOIN teams t ON t.TEAM_ID = gd.TEAM_ID
 INNER JOIN games g ON g.GAME_ID = gd.GAME_ID
 WHERE SEASON BETWEEN 2010 AND 2019
 GROUP BY Time, Temporada
-ORDER BY Resultado DESC
+ORDER BY Ofensividade DESC
 LIMIT 10;
 
--- 10 JOGADORES COM MAIS ROUBOS DE BOLA EM UMA TEMPORADA
-SELECT gd.PLAYER_NAME Jogador, CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, COUNT(gd.GAME_ID) Jogos, SUM(STL) `Bola Roubada`, ROUND(SUM(STL)/COUNT(gd.GAME_ID), 2) Média,
+-- TOP 10 JOGADORES COM MAIS ROUBADAS DE BOLA EM UMA TEMPORADA
+SELECT gd.PLAYER_NAME Jogador, CONCAT(gd.TEAM_CITY,' ',t.NICKNAME) Time, COUNT(gd.GAME_ID) Jogos, SUM(STL) `Bola Roubada`,
 CASE
 		WHEN g.SEASON = '2010' THEN '2010-2011'
 		WHEN g.SEASON = '2011' THEN '2011-2012'
