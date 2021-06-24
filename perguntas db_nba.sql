@@ -60,7 +60,7 @@ where
 	games.season between '2010' and '2019' 
 group by time_de_casa,games_details.TEAM_CITY,games.SEASON having partidas_ganhadas_em_casa > 250  order by partidas_ganhadas_em_casa desc limit 10;
 
--- Top 10 Cestinhas(jogadores que mais pontuaram) na década
+-- Top 10 Cestinhas(Maiores Pontuações) na década
  SELECT 
 	games_details.player_name as nome_jogador ,
 	concat(games_details.TEAM_CITY,' ', teams.nickname) as time,
@@ -92,7 +92,7 @@ WHEN games.SEASON = '2012' THEN '2012-2013'
 	Pontos desc
 	limit 10;
 
-  -- Top 10 jogadores com mais assistências da década
+  -- Top 10 + assistências da década
 SELECT 
    games_details.player_name as nome_jogador,
 	concat(games_details.TEAM_CITY,' ', teams.nickname) as time,
